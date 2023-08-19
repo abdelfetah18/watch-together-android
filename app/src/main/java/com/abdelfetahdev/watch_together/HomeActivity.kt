@@ -1,11 +1,16 @@
 package com.abdelfetahdev.watch_together
 
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.runBlocking
+import okhttp3.internal.notify
+import okhttp3.internal.notifyAll
 
 
 class HomeActivity : AppCompatActivity() {
@@ -33,11 +38,33 @@ class HomeActivity : AppCompatActivity() {
         listView.adapter = adapter
 
         getExploreRooms()
+
+        val searchBar = findViewById<EditText>(R.id.search_bar)
+        searchBar.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE ||
+                event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                val query: String = searchBar.text.toString()
+                searchRoom(query)
+                searchBar.text.clear()
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
     }
 
     private fun getExploreRooms(){
         runBlocking {
             rooms.addAll((application as MyApp).client.getExploreRooms())
+        }
+    }
+
+    private fun searchRoom(query: String){
+        runBlocking {
+            rooms.clear()
+            rooms.addAll((application as MyApp).client.searchRooms(query))
+            runOnUiThread {
+                adapter.notifyDataSetChanged()
+            }
         }
     }
 

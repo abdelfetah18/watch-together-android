@@ -23,7 +23,9 @@
             android:layout_marginVertical="20dp"
             android:textSize="16sp"
             android:inputType="text"
-            android:autofillHints="@string/search"/>
+            android:autofillHints="@string/search"
+            android:singleLine="true"
+            android:imeOptions="actionDone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/explore_rooms"

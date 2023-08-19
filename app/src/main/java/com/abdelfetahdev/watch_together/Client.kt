@@ -307,4 +307,42 @@ class Client (private val accessToken: String){
             mutableListOf()
         }
     }
+
+    suspend fun searchRooms(query: String): MutableList<Room> = withContext(Dispatchers.IO) {
+        val url ="https://watch-together-uvdn.onrender.com/api/search?query=$query"
+
+        try {
+            val jsonBody = getRequest(url, null) ?: return@withContext mutableListOf()
+            val data = jsonBody.getJSONArray("data")
+            val rooms : MutableList<Room> = mutableListOf()
+            for(i in 0 until data.length()){
+                val room = data.getJSONObject(i)
+                val admin = room.getJSONObject("admin")
+                val creator = room.getJSONObject("creator")
+
+                rooms.add(
+                    Room(
+                        room.getString("_id"),
+                        room.optString("profile_image","null"),
+                        User(
+                            admin.getString("_id"),
+                            admin.getString("username"),
+                            admin.optString("profile_image", "null")
+                        ),
+                        User(
+                            creator.getString("_id"),
+                            creator.getString("username"),
+                            creator.optString("profile_image","null")
+                        ),
+                        room.getString("name"),
+                        room.getString("description"),
+                        room.getInt("total_members")
+                    )
+                )
+            }
+            rooms
+        }catch(e : IOException){
+            mutableListOf()
+        }
+    }
 }
