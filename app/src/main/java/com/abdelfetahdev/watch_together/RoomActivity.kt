@@ -104,7 +104,12 @@ class RoomActivity : AppCompatActivity() {
 
     private fun searchYoutubeVideos(query: String){
         runBlocking {
+            videos.clear()
             videos.addAll((application as MyApp).client.searchYoutubeVideos(query))
+
+            runOnUiThread {
+                adapter.notifyDataSetChanged()
+            }
         }
     }
 }
