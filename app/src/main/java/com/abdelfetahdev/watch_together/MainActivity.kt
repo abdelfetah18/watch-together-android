@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.runBlocking
 
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.sign_in)
         val signInBtn = findViewById<Button>(R.id.sign_in)
         signInBtn.setOnClickListener {
+            Toast.makeText(this, "Sign in", Toast.LENGTH_SHORT).show()
             val username = findViewById<EditText>(R.id.username).text.toString()
             val password = findViewById<EditText>(R.id.password).text.toString()
 

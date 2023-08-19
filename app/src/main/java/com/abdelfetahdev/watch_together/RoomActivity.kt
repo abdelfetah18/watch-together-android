@@ -3,7 +3,10 @@ package com.abdelfetahdev.watch_together
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,6 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.runBlocking
+import okhttp3.internal.notifyAll
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 
 class RoomActivity : AppCompatActivity() {
@@ -60,6 +67,18 @@ class RoomActivity : AppCompatActivity() {
                 Toast.makeText(this, "You are the admin, you need to chose video to play instead.", Toast.LENGTH_SHORT).show()
             }
         }
+
+        val searchBar = findViewById<EditText>(R.id.search_bar)
+        searchBar.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE ||
+                event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                val query: String = searchBar.text.toString()
+                searchYoutubeVideos(query)
+                searchBar.text.clear()
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
     }
 
     private fun getRoomById(room_id: String){
@@ -80,6 +99,12 @@ class RoomActivity : AppCompatActivity() {
                     listView.adapter = adapter
                 }
             }
+        }
+    }
+
+    private fun searchYoutubeVideos(query: String){
+        runBlocking {
+            videos.addAll((application as MyApp).client.searchYoutubeVideos(query))
         }
     }
 }

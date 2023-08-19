@@ -325,4 +325,49 @@ class Client (private val accessToken: String){
             false
         }
     }
+
+    suspend fun searchYoutubeVideos(query: String): MutableList<Video> = withContext(Dispatchers.IO) {
+        val url ="https://watch-together-uvdn.onrender.com/api/room/youtube_search?q=$query"
+
+        try {
+            val request = Request.Builder()
+                .url(url)
+                .header("Authorization", accessToken)
+                .get()
+                .build()
+            val response: Response = client.newCall(request).execute()
+            response.headers["Content-Type"]?.contains("application/json")
+                ?: throw Throwable("response.body not Found")
+            val responseBody: ResponseBody =
+                response.body ?: throw Throwable("response.body not Found")
+            val resBody = responseBody.string()
+
+            val jsonBody = JSONObject(resBody)
+            if (jsonBody.getString("status") != "success") {
+                return@withContext mutableListOf()
+            }
+            val isOfficialAPI = jsonBody.getBoolean("is_official_api")
+            val data = jsonBody.getJSONArray("videos")
+
+            val videos : MutableList<Video> = mutableListOf()
+            for(i in 0 until data.length()){
+                val video = data.getJSONObject(i)
+                if(isOfficialAPI){
+                    TODO("Check youtube official API properties.")
+                }else{
+                    videos.add(
+                        Video(
+                            video.getString("title"),
+                            video.getString("url"),
+                            video.getString("thumbnail")
+                        )
+                    )
+                }
+            }
+            videos
+
+        }catch(e : IOException){
+            mutableListOf()
+        }
+    }
 }

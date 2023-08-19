@@ -58,7 +58,9 @@
             android:layout_marginVertical="20dp"
             android:textSize="16sp"
             android:inputType="text"
-            android:autofillHints="@string/search"/>
+            android:autofillHints="@string/search"
+            android:singleLine="true"
+            android:imeOptions="actionDone" />
 
         <Button
             android:id="@+id/open_video_player_btn"
