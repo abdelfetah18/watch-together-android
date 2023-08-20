@@ -1,5 +1,6 @@
 package com.abdelfetahdev.watch_together
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.JsonObject
@@ -10,17 +11,17 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import okhttp3.ResponseBody
-import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 
-class Client (private val accessToken: String){
+class Client (accessToken: String){
     private val client = OkHttpClient()
+    var accessToken = accessToken
 
-    private fun getRequest(url: String,token: String?): JSONObject? {
+    private fun getRequest(url: String): JSONObject? {
         val request = Request.Builder()
             .url(url)
-            .header("Authorization", token ?: accessToken)
+            .header("Authorization", accessToken)
             .get()
             .build()
         val response: Response = client.newCall(request).execute()
@@ -30,6 +31,7 @@ class Client (private val accessToken: String){
             response.body ?: throw Throwable("response.body not Found")
         val resBody = responseBody.string()
 
+        Log.i("HTTP_REQUEST_INFO", "url: $url\naccessToken: $accessToken")
         val jsonBody = JSONObject(resBody)
         if (jsonBody.getString("status") != "success") {
             return null
@@ -71,7 +73,7 @@ class Client (private val accessToken: String){
         val url = "https://watch-together-uvdn.onrender.com/api/user"
 
         try {
-            val jsonBody = getRequest(url, null) ?: return@withContext null
+            val jsonBody = getRequest(url) ?: return@withContext null
             val data = jsonBody.getJSONObject("data")
 
             val user = User(
@@ -86,11 +88,11 @@ class Client (private val accessToken: String){
         }
     }
 
-    suspend fun getNewAccessToken(token : String) : String? = withContext(Dispatchers.IO) {
+    suspend fun getNewAccessToken() : String? = withContext(Dispatchers.IO) {
         val url ="https://watch-together-uvdn.onrender.com/api/auth/update_token"
 
         try {
-            val jsonBody = getRequest(url, token) ?: return@withContext null
+            val jsonBody = getRequest(url) ?: return@withContext null
             val data = jsonBody.getJSONObject("data")
             data.getString("token").toString()
         }catch(e : IOException){
@@ -102,7 +104,7 @@ class Client (private val accessToken: String){
         val url ="https://watch-together-uvdn.onrender.com/api/explore"
 
         try {
-            val jsonBody = getRequest(url, null) ?: return@withContext mutableListOf()
+            val jsonBody = getRequest(url) ?: return@withContext mutableListOf()
             val data = jsonBody.getJSONArray("data")
 
             val rooms : MutableList<Room> = mutableListOf()
@@ -141,7 +143,7 @@ class Client (private val accessToken: String){
         val url ="https://watch-together-uvdn.onrender.com/api/user/rooms"
 
         try {
-            val jsonBody = getRequest(url, null) ?: return@withContext mutableListOf()
+            val jsonBody = getRequest(url) ?: return@withContext mutableListOf()
             val data = jsonBody.getJSONArray("data")
             val rooms : MutableList<Room> = mutableListOf()
             for(i in 0 until data.length()){
@@ -178,7 +180,7 @@ class Client (private val accessToken: String){
     suspend fun getVideoInfo(videoUrl : String): String? = withContext(Dispatchers.IO) {
         val url = "https://watch-together-uvdn.onrender.com/api/get_video?video_url=$videoUrl"
         try {
-            val jsonBody = getRequest(url, null) ?: return@withContext null
+            val jsonBody = getRequest(url) ?: return@withContext null
             val data = jsonBody.getJSONArray("data")
             if(data.length() > 0){
                 data.getJSONObject(0).getString("url")
@@ -194,7 +196,7 @@ class Client (private val accessToken: String){
         val url = "https://watch-together-uvdn.onrender.com/api/room/$roomId"
 
         try {
-            val jsonBody = getRequest(url, null) ?: return@withContext null
+            val jsonBody = getRequest(url) ?: return@withContext null
             val data = jsonBody.getJSONObject("data")
             val admin = data.getJSONObject("admin")
             val creator = data.getJSONObject("creator")
@@ -233,9 +235,32 @@ class Client (private val accessToken: String){
         val jsonBody = postRequest(url, json)
         if(jsonBody != null){
             val data = jsonBody.getJSONObject("data")
-            return@withContext data.getString("token").toString()
+            val token = data.getString("token")
+            accessToken = token
+            return@withContext token
         }
 
+        null
+    }
+
+    suspend fun signUp(username: String,email: String,password: String): String? = withContext(Dispatchers.IO) {
+        val url = "https://watch-together-uvdn.onrender.com/api/auth/sign_up"
+        val json = JsonObject(
+            mapOf(
+                "username" to JsonPrimitive(username),
+                "email" to JsonPrimitive(email),
+                "password" to JsonPrimitive(password)
+            )
+        )
+
+        val jsonBody = postRequest(url, json)
+        if(jsonBody != null){
+            val data = jsonBody.getJSONObject("data")
+            val token = data.getString("token")
+            Log.i("HTTP_REQUEST_INFO", "TOKEN: $token")
+            accessToken = token
+            return@withContext token
+        }
         null
     }
 
@@ -243,7 +268,7 @@ class Client (private val accessToken: String){
         val url ="https://watch-together-uvdn.onrender.com/api/room/chat?room_id=$roomId"
 
         try {
-            val jsonBody = getRequest(url, null) ?: return@withContext mutableListOf()
+            val jsonBody = getRequest(url) ?: return@withContext mutableListOf()
             val data = jsonBody.getJSONArray("data")
             val chatMessages : MutableList<Message> = mutableListOf()
             for(i in 0 until data.length()){
@@ -283,7 +308,7 @@ class Client (private val accessToken: String){
         val url ="https://watch-together-uvdn.onrender.com/api/room/youtube_search?q=$query"
 
         try {
-            val jsonBody = getRequest(url, null) ?: return@withContext mutableListOf()
+            val jsonBody = getRequest(url) ?: return@withContext mutableListOf()
             val isOfficialAPI = jsonBody.getBoolean("is_official_api")
             val data = jsonBody.getJSONArray("videos")
             val videos : MutableList<Video> = mutableListOf()
@@ -312,7 +337,7 @@ class Client (private val accessToken: String){
         val url ="https://watch-together-uvdn.onrender.com/api/search?query=$query"
 
         try {
-            val jsonBody = getRequest(url, null) ?: return@withContext mutableListOf()
+            val jsonBody = getRequest(url) ?: return@withContext mutableListOf()
             val data = jsonBody.getJSONArray("data")
             val rooms : MutableList<Room> = mutableListOf()
             for(i in 0 until data.length()){

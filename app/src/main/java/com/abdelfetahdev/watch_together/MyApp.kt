@@ -44,6 +44,7 @@ class MyApp : Application() {
             val r : User? = client.getUser()
             if(r != null){
                 user = r
+                accessToken = client.accessToken
             }else{
                 // TODO: Handle error by sending the user a login page.
             }
