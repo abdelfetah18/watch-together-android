@@ -1,6 +1,8 @@
 package com.abdelfetahdev.watch_together
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.JsonObject
@@ -14,30 +16,33 @@ import okhttp3.ResponseBody
 import org.json.JSONObject
 import java.io.IOException
 
-class Client (accessToken: String){
+class Client (var accessToken: String){
     private val client = OkHttpClient()
-    var accessToken = accessToken
-
     private fun getRequest(url: String): JSONObject? {
         val request = Request.Builder()
             .url(url)
             .header("Authorization", accessToken)
             .get()
             .build()
-        val response: Response = client.newCall(request).execute()
-        response.headers["Content-Type"]?.contains("application/json")
-            ?: throw Throwable("response.body not Found")
-        val responseBody: ResponseBody =
-            response.body ?: throw Throwable("response.body not Found")
-        val resBody = responseBody.string()
+        try {
+            val response: Response = client.newCall(request).execute()
+            response.headers["Content-Type"]?.contains("application/json")
+                ?: throw Throwable("response.body not Found")
+            val responseBody: ResponseBody =
+                response.body ?: throw Throwable("response.body not Found")
+            val resBody = responseBody.string()
 
-        Log.i("HTTP_REQUEST_INFO", "url: $url\naccessToken: $accessToken")
-        val jsonBody = JSONObject(resBody)
-        if (jsonBody.getString("status") != "success") {
-            return null
+            Log.i("HTTP_REQUEST_INFO", "url: $url\naccessToken: $accessToken")
+            val jsonBody = JSONObject(resBody)
+            return jsonBody
+        } catch (e: IOException){
+            e.printStackTrace()
+            Log.e("CLIENT","e.message: ${e.message}")
+            if(e.message == "timeout"){
+                return getRequest(url)
+            }
         }
-
-        return jsonBody
+        return null
     }
 
     private fun postRequest(url: String, json: JsonObject): JSONObject? {
@@ -57,16 +62,15 @@ class Client (accessToken: String){
                 response.body ?: throw Throwable("response.body not Found")
             val resBody = responseBody.string()
 
-            val jsonBody = JSONObject(resBody)
-            return if (jsonBody.getString("status") == "success") {
-                jsonBody
-            }else{
-                null
-            }
+            return JSONObject(resBody)
         } catch (e: IOException) {
-            println("Something went wrong")
-            return null
+            e.printStackTrace()
+            Log.e("CLIENT", "e.message: ${e.message}")
+            if (e.message == "timeout") {
+                return postRequest(url, json)
+            }
         }
+        return null
     }
 
     suspend fun getUser(): User? = withContext(Dispatchers.IO) {
@@ -223,7 +227,7 @@ class Client (accessToken: String){
         }
     }
 
-    suspend fun signIn(username: String, password: String): String? = withContext(Dispatchers.IO) {
+    suspend fun signIn(username: String, password: String): JSONObject? = withContext(Dispatchers.IO) {
         val url = "https://watch-together-uvdn.onrender.com/api/auth/sign_in"
         val json = JsonObject(
             mapOf(
@@ -234,12 +238,14 @@ class Client (accessToken: String){
 
         val jsonBody = postRequest(url, json)
         if(jsonBody != null){
-            val data = jsonBody.getJSONObject("data")
-            val token = data.getString("token")
-            accessToken = token
-            return@withContext token
+            val status = jsonBody.getString("status")
+            if(status == "success"){
+                val data = jsonBody.getJSONObject("data")
+                val token = data.getString("token")
+                accessToken = token
+            }
+            return@withContext jsonBody
         }
-
         null
     }
 

@@ -8,6 +8,8 @@
     android:background="#111827"
     android:orientation="vertical">
 
+    <include layout="@layout/loading" android:id="@+id/loading_screen" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone" />
+
     <ImageView
         android:layout_gravity="top"
         android:layout_width="wrap_content"

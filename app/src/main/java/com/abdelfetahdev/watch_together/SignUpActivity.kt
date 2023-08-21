@@ -3,8 +3,10 @@ package com.abdelfetahdev.watch_together
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import androidx.cardview.widget.CardView
 import kotlinx.coroutines.runBlocking
 
 class SignUpActivity : AppCompatActivity() {
@@ -23,6 +25,9 @@ class SignUpActivity : AppCompatActivity() {
         val signInBtn = findViewById<Button>(R.id.sign_in_btn)
 
         signUpBtn.setOnClickListener {
+            val loadingScreen = findViewById<CardView>(R.id.loading_screen)
+            loadingScreen.visibility = View.VISIBLE
+
             val username = usernameInput.text.toString()
             val email = emailInput.text.toString()
             val password = passwordInput.text.toString()
