@@ -1,6 +1,8 @@
 package com.abdelfetahdev.watch_together
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +28,13 @@ class ProfileActivity : AppCompatActivity() {
 
         val usernameView = findViewById<TextView>(R.id.username)
         val profileImageView = findViewById<ImageView>(R.id.profile_image)
+        val createRoomBtn = findViewById<Button>(R.id.create_room_btn)
+
+        createRoomBtn.setOnClickListener {
+            val intent = Intent(this@ProfileActivity, CreateRoomActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         val user = myApplication.user
 

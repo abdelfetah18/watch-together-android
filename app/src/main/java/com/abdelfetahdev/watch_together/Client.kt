@@ -376,4 +376,18 @@ class Client (var accessToken: String){
             mutableListOf()
         }
     }
+
+    suspend fun createRoom(name: String,description: String,privacy: String,password: String?): JSONObject? = withContext(Dispatchers.IO) {
+        val url = "https://watch-together-uvdn.onrender.com/api/room/create"
+        val json = JsonObject(
+            mapOf(
+                "username" to JsonPrimitive(name),
+                "description" to JsonPrimitive(description),
+                "privacy" to JsonPrimitive(privacy),
+                "password" to JsonPrimitive(password)
+            )
+        )
+
+        return@withContext postRequest(url, json)
+    }
 }
