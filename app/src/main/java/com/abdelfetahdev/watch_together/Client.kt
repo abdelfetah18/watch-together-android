@@ -1,19 +1,22 @@
 package com.abdelfetahdev.watch_together
 
-import android.content.Context
+import android.net.Uri
 import android.util.Log
-import android.widget.Toast
+import androidx.core.net.toFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import okhttp3.ResponseBody
 import org.json.JSONObject
+import java.io.File
 import java.io.IOException
 
 class Client (var accessToken: String){
@@ -33,12 +36,11 @@ class Client (var accessToken: String){
             val resBody = responseBody.string()
 
             Log.i("HTTP_REQUEST_INFO", "url: $url\naccessToken: $accessToken")
-            val jsonBody = JSONObject(resBody)
-            return jsonBody
-        } catch (e: IOException){
+            return JSONObject(resBody)
+        } catch (e: IOException) {
             e.printStackTrace()
-            Log.e("CLIENT","e.message: ${e.message}")
-            if(e.message == "timeout"){
+            Log.e("CLIENT", "e.message: ${e.message}")
+            if (e.message == "timeout") {
                 return getRequest(url)
             }
         }
@@ -51,6 +53,7 @@ class Client (var accessToken: String){
         val requestBody = jsonString.toRequestBody(mediaType)
         val request = Request.Builder()
             .url(url)
+            .header("Authorization", accessToken)
             .post(requestBody)
             .build()
 
@@ -381,7 +384,7 @@ class Client (var accessToken: String){
         val url = "https://watch-together-uvdn.onrender.com/api/room/create"
         val json = JsonObject(
             mapOf(
-                "username" to JsonPrimitive(name),
+                "name" to JsonPrimitive(name),
                 "description" to JsonPrimitive(description),
                 "privacy" to JsonPrimitive(privacy),
                 "password" to JsonPrimitive(password)
@@ -389,5 +392,37 @@ class Client (var accessToken: String){
         )
 
         return@withContext postRequest(url, json)
+    }
+
+    suspend fun uploadRoomProfileImage(roomId: String,roomImage: String): JSONObject? = withContext(Dispatchers.IO) {
+        val url = "https://watch-together-uvdn.onrender.com/api/room/upload_profile_image"
+        val imageFile = File(roomImage)
+
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("room_id", roomId)
+            .addFormDataPart("profile_image", imageFile.name, imageFile.asRequestBody("image/*".toMediaType()))
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .header("Authorization", accessToken)
+            .post(requestBody)
+            .build()
+
+        try {
+            val response: Response = client.newCall(request).execute()
+            response.headers["Content-Type"]?.contains("application/json")
+                ?: throw Throwable("response.body not Found")
+            val responseBody: ResponseBody =
+                response.body ?: throw Throwable("response.body not Found")
+            val resBody = responseBody.string()
+
+            return@withContext JSONObject(resBody)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Log.e("CLIENT", "e.message: ${e.message}")
+        }
+        null
     }
 }
