@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleToken(token: String, store: UserStore){
         setContentView(R.layout.loading)
+        println("Loading screen.")
         runBlocking {
             val accessToken = (application as MyApp).client.getNewAccessToken()
             println("token: $token")
@@ -38,6 +39,9 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this@MainActivity, HomeActivity::class.java)
                 startActivity(intent)
                 finish()
+            }else{
+                store.clearToken()
+                handleSignIn(store)
             }
         }
     }

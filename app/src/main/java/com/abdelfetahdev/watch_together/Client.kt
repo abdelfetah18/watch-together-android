@@ -100,6 +100,11 @@ class Client (var accessToken: String){
 
         try {
             val jsonBody = getRequest(url) ?: return@withContext null
+            val status = jsonBody.getString("status")
+            Log.i("CLIENT", jsonBody.toString(2))
+            if(status == "error"){
+                return@withContext null
+            }
             val data = jsonBody.getJSONObject("data")
             data.getString("token").toString()
         }catch(e : IOException){
