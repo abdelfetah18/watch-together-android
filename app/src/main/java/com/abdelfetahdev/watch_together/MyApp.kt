@@ -1,58 +1,54 @@
 package com.abdelfetahdev.watch_together
 
 import android.app.Application
-import android.widget.Toast
+import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
+import com.abdelfetahdev.watch_together.entities.User
+import com.abdelfetahdev.watch_together.entities.UserSession
+import com.abdelfetahdev.watch_together.rest_api.RestUsers
+import com.abdelfetahdev.watch_together.utilities.HttpClient
+import com.abdelfetahdev.watch_together.utilities.MyWebSocketListener
+import com.abdelfetahdev.watch_together.utilities.WebSocketClient
 import kotlinx.coroutines.runBlocking
+import okhttp3.OkHttpClient
 import okhttp3.WebSocketListener
 
 class MyApp : Application() {
     companion object {
-        lateinit var webSocketClient: WebSocketClient
-        lateinit var webSocketListener: MyWebSocketListener
+        const val SHARED_PREFS = "SHARED_PREFS"
     }
 
-    lateinit var userStore : UserStore
-    lateinit var accessToken : String
-    lateinit var user : User
-    lateinit var client : Client
+    lateinit var accessToken: String
+    lateinit var httpClient: HttpClient
+    var user: User? = null
 
     override fun onCreate() {
         super.onCreate()
 
-        userStore = UserStore(applicationContext)
-        accessToken = userStore.getToken().toString()
-        client = Client(accessToken)
-    }
-
-    fun getMyUserStore(): UserStore {
-        if (userStore == null) {
-            userStore = UserStore(this)
+        loadAccessToken()
+        httpClient = HttpClient(OkHttpClient(), accessToken)
+        if (accessToken.length > 0) {
+            loadUser()
         }
-        return userStore
     }
 
-    fun connectToWebSocket(room_id : String, webSocketListener : WebSocketListener) : WebSocketClient {
-        val socketUrl = "wss://watch-together-uvdn.onrender.com/?room_id=$room_id&access_token=$accessToken"
-        println("socketUrl: $socketUrl")
-        webSocketClient = WebSocketClient(socketUrl)
-        webSocketClient.connect(webSocketListener)
-        return webSocketClient
+    fun loadAccessToken() {
+        val prefs: SharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+        accessToken = prefs.getString(UserSession.ACCESS_TOKEN, "") ?: ""
+        Log.i("MyApp", "accessToken=$accessToken")
     }
 
-    fun initUser(){
+    fun loadUser() {
+        val restUsers = RestUsers(httpClient)
         runBlocking {
-            val r : User? = client.getUser()
-            if(r != null){
-                user = r
-                accessToken = client.accessToken
-            }else{
-                // TODO: Handle error by sending the user a login page.
+            val response = restUsers.getCurrentUser()
+            if (!response.isError) {
+                if (response.data != null) {
+                    user = response.data
+                }
             }
         }
-    }
-
-    fun getUserInfo() : User {
-        return user
     }
 }
 

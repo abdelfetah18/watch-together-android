@@ -6,6 +6,7 @@
     </style>
 
     <style name="Theme.Watchtogether" parent="Base.Theme.Watchtogether" />
+
     <style name="Theme.Watchtogether.Fullscreen" parent="Theme.Watchtogether">
         <item name="android:actionBarStyle">@style/Widget.Theme.Watchtogether.ActionBar.Fullscreen
         </item>
@@ -16,5 +17,13 @@
     <style name="ThemeOverlay.Watchtogether.FullscreenContainer" parent="">
         <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
         <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryDark">@color/dark_gray</item>
+        <item name="colorAccent">@color/gray</item>
+        <item name="android:statusBarColor">@color/gray</item>
     </style>
 </resources>

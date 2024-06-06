@@ -1,125 +1,217 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/dark_gray"
     android:orientation="vertical"
-    android:background="#111827" >
+    android:paddingVertical="10dp">
 
-    <ImageButton
-        android:id="@+id/go_back_btn"
-        android:layout_margin="10dp"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:scaleType="fitCenter"
-        android:background="#00000000"
-        android:src="@drawable/go_back"
-        android:fontFamily="@font/firacode_semibold" />
+    <ImageView
+        android:id="@+id/go_back_button"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginHorizontal="20dp"
+        android:src="@drawable/ic_left_arrow" />
 
-    <LinearLayout
-        android:paddingVertical="20dp"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:layout_marginTop="20dp"
+        android:fontFamily="sans-serif-medium"
+        android:paddingHorizontal="20dp"
+        android:text="@string/create_new_room"
+        android:textColor="@color/light_white"
+        android:textSize="24sp" />
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="100dp">
-            <ImageView
-                android:id="@+id/room_image"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/bannerpng" />
-        </androidx.cardview.widget.CardView>
-
-        <Button
-            android:id="@+id/edit_profile_image_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_profile_image_btn"
-            android:text="EDIT PROFILE IMAGE"
-            android:textSize="14sp"
-            android:paddingHorizontal="40dp"
-            android:layout_marginTop="10dp" />
-    </LinearLayout>
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="40dp">
+        android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/room_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:autofillHints=""
-            android:background="@drawable/input"
-            android:fontFamily="@font/firacode_regular"
-            android:hint="Name"
-            android:inputType="text"
-            android:paddingHorizontal="30dp"
-            android:paddingVertical="10dp"
-            android:textColorHint="#E2E8F0"
-            android:textSize="16sp" />
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/room_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="15dp"
-            android:autofillHints=""
-            android:background="@drawable/input"
-            android:fontFamily="@font/firacode_regular"
-            android:hint="Description"
-            android:inputType="text"
-            android:paddingHorizontal="30dp"
-            android:paddingVertical="10dp"
-            android:textColorHint="#E2E8F0"
-            android:textSize="16sp" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp">
 
-        <Switch
-            android:id="@+id/is_private_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="30dp"
-            android:layout_marginTop="15dp"
-            android:text="Is Private"
-            android:textSize="16sp"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
 
-        <EditText
-            android:id="@+id/room_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="15dp"
-            android:autofillHints=""
-            android:background="@drawable/input"
-            android:fontFamily="@font/firacode_regular"
-            android:hint="@string/password"
-            android:inputType="text"
-            android:paddingHorizontal="30dp"
-            android:paddingVertical="10dp"
-            android:textColorHint="#E2E8F0"
-            android:textSize="16sp" />
+                    android:backgroundTint="@color/gray"
+                    app:cardCornerRadius="120dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/create_room_btn"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="60dp"
-            android:background="@drawable/primary_btn"
-            android:text="CREATE" />
+                    <ImageView
+                        android:id="@+id/room_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
-    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/select_image_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@color/primary_color"
+                    app:cardCornerRadius="120dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_camera" />
+
+                </androidx.cardview.widget.CardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/name_label"
+                    android:textColor="@color/light_white"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/room_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/input_with_border_and_bg"
+                    android:hint="@string/enter_room_name"
+                    android:paddingHorizontal="40dp"
+                    android:paddingVertical="16dp"
+                    android:textColorHint="@color/light_gray_3"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/description_label"
+                    android:textColor="@color/light_white"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/room_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/input_with_border_and_bg"
+                    android:hint="@string/enter_room_description"
+                    android:paddingHorizontal="40dp"
+                    android:paddingVertical="16dp"
+                    android:textColorHint="@color/light_gray_3"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/privacy_label"
+                    android:textColor="@color/light_white"
+                    android:textSize="14sp" />
+
+                <Spinner
+                    android:id="@+id/room_privacy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/input_with_border_and_bg"
+                    android:paddingHorizontal="40dp"
+                    android:paddingVertical="16dp"
+                    android:textColorHint="@color/light_gray_3"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:id="@+id/room_password_wrapper"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/password_label"
+                        android:textColor="@color/light_white"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/room_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/input_with_border_and_bg"
+                        android:hint="@string/enter_password"
+                        android:paddingHorizontal="40dp"
+                        android:paddingVertical="16dp"
+                        android:textColorHint="@color/light_gray_3"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="60dp"
+                android:backgroundTint="@color/primary_color"
+                app:cardCornerRadius="50dp">
+
+                <LinearLayout
+                    android:id="@+id/create_room_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/primary_color"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingVertical="10dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_rect_plus" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/primary_color"
+                        android:text="@string/create"
+                        android:textColor="@color/light_white"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </ScrollView>
 </LinearLayout>

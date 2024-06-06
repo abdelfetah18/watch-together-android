@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="transparent">#00000000</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light_blue_600">#FF039BE5</color>
@@ -7,4 +8,19 @@
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
+    <color name="dark_gray">#FF1A1B1D</color>
+    <color name="gray">#FF242529</color>
+    <color name="light_white">#FFE5E5E5</color>
+    <color name="second_light_white">#FF9CA3AF</color>
+    <color name="placeholder_light_white">#FF6B7280</color>
+    <color name="placeholder_light_gray">#FF4A4C55</color>
+    <color name="input_border">#FF6B7280</color>
+    <color name="light_gray">#FF464646</color>
+    <color name="light_gray_1">#FF3B3D43</color>
+    <color name="light_gray_2">#FF6B6B6B</color>
+    <color name="light_gray_3">#FF6C6C6C</color>
+    <color name="primary_color">#FF4338CA</color>
+    <color name="secondary_chat_color">#FFE4E6E7</color>
+    <color name="light_gray_bg">#FF464953</color>
+    <color name="light_green">#FF1C8C49</color>
 </resources>
