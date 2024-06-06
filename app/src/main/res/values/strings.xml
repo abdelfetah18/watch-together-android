@@ -4,10 +4,22 @@
     <string name="app_description">Watch-Together is the ultimate platform for shared video experiences.</string>
     <string name="login_now">Login now</string>
     <string name="username">Username</string>
+    <string name="username_label">Username:</string>
+    <string name="enter_your_username">Enter your username</string>
+    <string name="enter_username">Enter a username</string>
+    <string name="email_label">Email:</string>
+    <string name="enter_email">Enter your email</string>
     <string name="password">Password</string>
+    <string name="password_label">Password:</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="enter_password">Enter a strong password</string>
+
     <string name="sign_in">SIGN IN</string>
     <string name="sign_up">SIGN UP</string>
     <string name="welcom_back">WELCOME BACK</string>
+    <string name="welcom_back_paragraph">Welcome back! Please enter your details.</string>
+    <string name="do_not_have_an_account">Don’t have an account?</string>
+    <string name="already_have_an_account">Already have an account?</string>
     <string name="email">Email</string>
     <string name="create_new_account">CREATE NEW ACCOUNT</string>
     <string name="search">Search</string>
@@ -15,4 +27,64 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="loading">Loading...</string>
+    <string name="create_an_account">Create an account</string>
+    <string name="welcome_please_enter_your_details">Welcome! Please enter your details.</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="room_name">Room name</string>
+    <string name="programmers">Programmers</string>
+    <string name="room_members_count">20</string>
+    <string name="javascript">JavaScript</string>
+    <string name="create_new_room">Create New Room</string>
+    <string name="my_rooms_label">My Rooms:</string>
+    <string name="settings">Settings</string>
+    <string name="account">Account</string>
+    <string name="personal_info">Personal Info</string>
+    <string name="general_setting">General Setting</string>
+    <string name="privacy_and_security">Privacy and security</string>
+    <string name="help">Help</string>
+    <string name="log_out">Log out</string>
+
+    <string name="chat">Chat</string>
+    <string name="watch">Watch</string>
+    <string name="members">Members</string>
+    <string name="setting">Setting</string>
+
+    <string name="have_a_youtube_url">Have a YouTube URL?</string>
+    <string name="paste_it_here_to_watch_together">Paste it here to watch together!</string>
+    <string name="youtube_url">Youtube URL</string>
+    <string name="open">Open</string>
+    <string name="or">Or</string>
+    <string name="want_to_find_a_video">Want to find a video?</string>
+    <string name="use_our_search_feature_to_explore_and_select_a_video_to_watch_together">Use our search feature to explore and select a video to watch together!</string>
+    <string name="type_a_word_to_search">Type a word to search…</string>
+    <string name="search_youtube_videos">Search YouTube Videos</string>
+    <string name="enter_keywords_to_find">Enter keywords to find your favorite videos and watch together with friends!</string>
+    <string name="video_title">VPNs, Proxies and Secure Tunnels Explained (Deepdive)</string>
+    <string name="youtube_channel_name">LiveOverflow</string>
+    <string name="video_views">75K views</string>
+    <string name="video_posted_at">1 year ago</string>
+    <string name="video_duration">09:23</string>
+    <string name="video_progress">3:30/10:00</string>
+    <string name="name_label">Name:</string>
+    <string name="description_label">Description:</string>
+    <string name="privacy_label">Privacy:</string>
+    <string name="enter_room_name">Enter room name</string>
+    <string name="enter_room_description">Enter room description (optional)</string>
+    <string name="create">Create</string>
+    <string name="online_members_count">5 Members are online</string>
+    <string name="type_a_message">Type a message…</string>
+    <string name="sent_ago">Sent 17h ago</string>
+    <string name="message_example">Hi</string>
+
+    <string name="room_members">Room Members</string>
+    <string name="view_and_manage_the_members_of_your_room">View and manage the members of your room. Invite friends to join and watch videos together!</string>
+
+    <string name="join_room">Join Room</string>
+    <string name="joined_at">Joined at 01 June 2024 00:00</string>
+
+    <string-array name="select_privacy">
+        <item>public</item>
+        <item>private</item>
+    </string-array>
 </resources>

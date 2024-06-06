@@ -3,23 +3,26 @@
     android:id="@+id/loading"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="#3F000000"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:backgroundTint="#3F000000">
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_gravity="center"
         android:gravity="center"
-        android:layout_gravity="center">
+        android:orientation="vertical">
+
         <ProgressBar
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:fontFamily="@font/firacode_semibold"
-            android:text="@string/loading"/>
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/loading" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
